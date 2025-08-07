@@ -39,7 +39,10 @@ services:
       - vhostd:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
     environment:
-      NGINX_PROXY_CONTAINER: nginx-proxy
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin_123
     restart: unless-stopped
     networks:
       - webproxy
