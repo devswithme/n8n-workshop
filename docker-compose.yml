@@ -7,7 +7,7 @@ services:
     environment:
       - VIRTUAL_HOST=neat-states-attend-freely.a276.dcdg.xyz
       - LETSENCRYPT_HOST=neat-states-attend-freely.a276.dcdg.xyz
-      - LETSENCRYPT_EMAIL=testedprojected@gmail.com
+      - LETSENCRYPT_EMAIL=example@gmail.com
       - WEBHOOK_URL=https://neat-states-attend-freely.a276.dcdg.xyz
     restart: unless-stopped
     networks:
