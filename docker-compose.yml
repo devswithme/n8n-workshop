@@ -1,54 +1,42 @@
 services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+      - n8n
+    networks:
+      - net
+
+  app:
+    image: node:alpine
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    command: ["node", "app.js"]
+    restart: unless-stopped
+    networks:
+      - net
+
   n8n:
     image: docker.n8n.io/n8nio/n8n
     container_name: n8n
     volumes:
-      - n8n_data:/home/node/.n8n
+      - n8n:/home/node/.n8n
     environment:
-      - VIRTUAL_HOST=neat-states-attend-freely.a276.dcdg.xyz
-      - LETSENCRYPT_HOST=neat-states-attend-freely.a276.dcdg.xyz
-      - LETSENCRYPT_EMAIL=testedprojected@gmail.com
-      - WEBHOOK_URL=https://neat-states-attend-freely.a276.dcdg.xyz
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin
     restart: unless-stopped
     networks:
-      - webproxy
-
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - certs:/etc/nginx/certs:ro
-      - vhostd:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-    restart: unless-stopped
-    networks:
-      - webproxy
-
-  nginx-letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: nginx-letsencrypt
-    depends_on:
-      - nginx-proxy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - certs:/etc/nginx/certs
-      - vhostd:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
-    environment:
-      NGINX_PROXY_CONTAINER: nginx-proxy
-    restart: unless-stopped
-    networks:
-      - webproxy
+      - net
 
 networks:
-  webproxy:
+  net:
 
 volumes:
-  n8n_data:
-  certs:
-  vhostd:
-  html:
+  n8n:
