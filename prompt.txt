@@ -27,7 +27,7 @@ Contoh format:
   "amount": 120000
   "customer"
   "order_items": [
-    { "name": "Jaket Bomber", "quantity": 1 }
+    { "name": "Jaket Bomber", "quantity": 1, "price": 10000 }
   ],
   "method": "bca"
 }
